@@ -1,0 +1,17 @@
+'\' will be used as "lambda" or "head" sign
+
+1. \xy.xz
+    a) \xz.xz
+    b) \mn.mz       // is equivalent to 1. x -> m; y -> n; z still free
+    c) \z(\x.xz)
+
+2. \xy.xxy
+    a) \mn.mnp
+    b) \x(\y.xy)
+    c) \a(\b.aab)   // is equivalent to 2. x -> a; y -> b; two single heads instead
+                    // of one combined head
+
+3. \xyz.zx
+    a) \x.(\y.(\z.z))
+    b) \tos.st      // is equivalent to 3. x -> t; y -> o; z -> s
+    c) \mnp.mn

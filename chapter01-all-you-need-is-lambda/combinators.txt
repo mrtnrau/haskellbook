@@ -1,0 +1,10 @@
+Combinators:
+
+Determine if each of the following are combinators or not:
+
+1. \x.xxx           // yes
+2. \xy.zx           // no z is free
+3. \xyz.xy(zx)      // yes
+4. \xyz.xy(zxy)     // yes
+5. \xy.xy(zxy)      // no z is free
+

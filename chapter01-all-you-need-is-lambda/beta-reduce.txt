@@ -1,0 +1,51 @@
+Beta Reduce
+
+Evaluate each of the following expressions to normal form.
+
+1.  (\abc.cba)zz(\wv.w)
+    (\bc.cbz)z(\wv.w)
+    (\c.czz)(\wv.w)
+    (\wv.w)zz
+    (\v.z)z
+    z
+
+2.  (\x.\y.xyy)(\a.a)b
+    (\y.(\a.a)yy)b
+    (\a.a)bb
+    bb
+
+3.  (\y.y)(\x.xx)(\z.zq)
+    (\x.xx)(\z.zq)
+    (\z.zq)(\z.zq)
+    (\z.zq)q
+    qq
+
+4.  (\z.z)(\z.zz)(\z.zy)
+    (\y.y)(\x.xx)(\z.zy)
+    // same as 3. with different free variable
+    yy
+
+5.  (\x.\y.xyy)(\y.y)y
+    (\a.\b.abb)(\c.c)y
+    (\b.(\c.c)bb)y
+    (\c.c)yy
+    yy
+
+6.  (\a.aa)(\b.ba)c
+    (\x.xx)(\y.ya)c
+    (\y.ya)(\y.ya)c
+    (\y.ya)(a)c
+    aac
+
+7.  (\xyz.xz(yz))(\x.z)(\x.a)
+    (\rst.rt(st))(\u.z)(\v.a)
+    (\st.(\u.z)(t)(st))(\v.a)
+    (\t.(\u.z)(t)((\v.a)t))
+    (\t.z((\v.a)t))
+    (\t.za)
+
+
+
+
+
+

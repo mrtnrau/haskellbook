@@ -1,0 +1,13 @@
+Normal form or diverge
+
+Determine if each of the following can be reduced to a ormal form of if they diverge:
+
+1.  \x.xxx          // is in normal form
+                    // nothing to apply to
+2.  (\z.zz)(\y.yy)
+    (\y.yy)(\y.yy)
+    (...)           // diverges
+
+3.  (\x.xxx)z
+    zzz             // is in normal form
+
