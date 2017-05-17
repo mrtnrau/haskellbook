@@ -1,0 +1,6 @@
+1.) not True && True
+2.) not (x == 6)
+3.) correct
+4.) ["Merry"] > ["Happy"]
+5.) can't combine Integer with Char
+
