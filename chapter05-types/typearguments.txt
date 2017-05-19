@@ -1,0 +1,9 @@
+1) (f x) :: Char -> Char -> Char
+2) (g 0 'c' "woot") :: Char
+3) (h 1.0 2) :: Num b => b
+4) (h 1 (5.5 :: Double)) :: Double
+5) (jackal "keyboard" "has the word jackal in it") :: [Char]
+6) (jackal "keyboard") :: Eq b => b -> [Char]
+7) (kessel 1 2) :: (Num a, Ord a) => a
+8) (kessel (2 :: Integer)) :: (Num a, Ord a) => a
+9) (kessel (1 :: Integer) 2) :: Integer
