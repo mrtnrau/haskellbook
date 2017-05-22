@@ -1,0 +1,18 @@
+1)
+max (length [1, 2, 3]) (length [8, 9, 10, 11, 12])
+max (3 :: Int) (5 :: Int)
+5 :: Int
+
+2)
+compare (3 * 4) (3 * 5)
+compare (12 :: Num a, Ord a) (15 :: Num a, Ord a)
+LT :: Ordering
+
+3)
+compare "Julie" True
+does not work
+
+4)
+(5 + 3) > (3 + 6)
+(8 :: Num a, Ord a) > (9 :: Num a, Ord a)
+False :: Bool
