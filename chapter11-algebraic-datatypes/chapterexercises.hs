@@ -20,6 +20,7 @@ f Friday = "Miller Time"
 -- 3) b) must begin with a capital letter
 
 -- 4) c) delivers the final element of xs and throws an error for []
+g :: [a] -> a
 g xs = xs !! (length xs - 1)
 
 -- Ciphers
