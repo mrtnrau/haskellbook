@@ -1,6 +1,13 @@
 module Main where
 
-import Lib
+import Hello
+import Dogs
+import System.IO
 
 main :: IO ()
-main = hello
+main = do
+  hSetBuffering stdout NoBuffering
+  putStr "Please enter your name: "
+  name <- getLine
+  hello name
+  dogs
