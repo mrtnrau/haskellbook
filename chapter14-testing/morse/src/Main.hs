@@ -10,7 +10,7 @@ import System.IO (hGetLine, hIsEOF, stdin)
 
 convertToMorse :: IO ()
 convertToMorse = forever $ do
-  weAreDone <- hIsEOF stdin
+  weAreDone <- hisEOF
   when weAreDone exitSuccess
   line <- hGetLine stdin
   convertLineToMorse line
@@ -48,6 +48,5 @@ main = do
       "to"   -> convertToMorse
       _      -> argError
     _     -> argError
-  where argError = do
-          putStrLn "Please specify the first argument as being\
+  where argError = putStrLn "Please specify the first argument as being\
                    \ 'from' or 'to' morse. such as: morse to"
