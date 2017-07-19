@@ -1,0 +1,36 @@
+name:                instances
+version:             0.1.0.0
+license:             BSD3
+license-file:        LICENSE
+author:              Martin Rau
+maintainer:          mrtn.rau@googlemail.com
+copyright:           2017 Martin Rau
+category:            Unclassified
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  ghc-options:         -Wall
+  exposed-modules:     Instances
+  build-depends:       base >= 4.7 && < 5
+  default-language:    Haskell2010
+
+executable instances
+  hs-source-dirs:      src
+  main-is:             Main.hs
+  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , instances
+  default-language:    Haskell2010
+
+test-suite instances-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Test.hs
+  build-depends:       base
+                     , QuickCheck
+                     , instances
+  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
