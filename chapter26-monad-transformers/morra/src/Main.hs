@@ -7,6 +7,8 @@ module Main where
 import           Control.Monad.IO.Class
 import           Control.Monad.Trans.State
 import           Data.Bool                 (bool)
+import           Data.List                 (isPrefixOf)
+import           Data.Maybe                (catMaybes)
 import           Data.String.Here
 import           System.Random
 
@@ -57,7 +59,6 @@ modeTemplate = [here|
 Which Mode do you want to play?
     PvP:   1
     PvAI:  2
-    AIvAI: 3
 >|]
 
 
@@ -78,7 +79,7 @@ If the number of fingers is odd
 -- Types
 
 newtype Hand = Hand Int
-  deriving Show
+  deriving (Show, Eq)
 
 
 data Player
@@ -90,7 +91,6 @@ data Player
 data Mode
   = PvP
   | PvAI
-  | AIvAI
   deriving (Show, Eq)
 
 
@@ -116,10 +116,11 @@ instance Show Game where
 --------------------------------------------------------------------------
 -- Game Logic
 
-playHand :: Player -> IO Hand
-playHand player = case player of
+playHand :: Player -> [Hand] -> IO Hand
+playHand player past = case player of
   Human -> readHand
-  AI    -> randomHand
+  AI    -> smartHand sub1 sub2 past -- no smart AI? -> substitute randomHand
+  where (sub1, sub2) = genSubsequences past
 
 
 readHand :: IO Hand
@@ -131,6 +132,54 @@ readHand = do
     '1' -> return $ Hand 1
     '2' -> return $ Hand 2
     _   -> readHand
+
+-- Some... AI...
+-- countSubsequence, take', pastRounds, smartHand
+
+countSubsequence :: Eq a => [a] -> [a] -> Int
+countSubsequence [] _ = 0
+countSubsequence _ [] = 0
+countSubsequence prefix list@(x:xs) =
+  bool next (1+next) (prefix `isPrefixOf` list)
+  where next = countSubsequence prefix xs
+
+
+take' :: Int -> [a] -> Maybe [a]
+take' 0 _      = Just []
+take' i []     = Nothing
+take' i (x:xs) = (x:) <$> take' (i-1) xs
+
+
+-- takes the hand history of one player
+-- generates the 1..4 last played hands
+--      new -> old
+-- e.g. [1,2,1,2,1]
+--      [[1], [1,2], [1,2,1], [1,2,1,2]]
+-- expands those with the next hand to be played
+-- either Hand 1 or Hand 2
+-- e.g.   [[1,1], [1,1,2], [1,1,2,1], [1,1,2,1,2]]
+--        [[2,1], [2,1,2], [2,1,2,1], [2,1,2,1,2]]
+-- these subsequences will be counted in the hand history
+genSubsequences :: [Hand] -> ([[Hand]], [[Hand]])
+genSubsequences hands = (fmap (Hand 1:) history, fmap (Hand 2:) history)
+  where history = catMaybes $ flip take' hands <$> [1..4]
+
+
+-- takes the 1..4 last played hands
+-- once expanded with Hand 1
+-- once expanded with Hand 2
+-- and the history of played hands
+-- generates the hand to be played next depending on how often
+-- the expanded respective subsequences occurred in the history of
+-- played hands
+smartHand :: [[Hand]] -> [[Hand]] -> [Hand] -> IO Hand
+smartHand sub1 sub2 pastRounds =
+  case compare ones twos of
+    LT -> return $ Hand 2
+    EQ -> randomHand
+    GT -> return $ Hand 1
+  where f subs = flip countSubsequence pastRounds <$> subs
+        (ones, twos) = (sum $ f sub1, sum $ f sub2)
 
 
 randomHand :: IO Hand
@@ -172,16 +221,17 @@ mode = do
   case m of
     '1' -> return (PvP, Human, Human)
     '2' -> return (PvAI, Human, AI)
-    '3' -> return (AIvAI, AI, AI)
     _   -> mode
 
 
 gameLoop :: StateT Game IO ()
 gameLoop = do
   Game score laps m op ep rounds <- get
-  oh <- liftIO $ playHand op
+  let opast = (\(Round oe) -> fst oe) <$> rounds
+      epast = (\(Round oe) -> snd oe) <$> rounds
+  oh <- liftIO $ playHand op epast -- the opponents past
   bool (liftIO $ putStr "") (liftIO $ putStr blankTemplate) (m == PvP)
-  eh <- liftIO $ playHand ep
+  eh <- liftIO $ playHand ep opast -- the opponents past
   let round  = Round (oh, eh)
       score' = updateScore round score
       laps'  = laps + 1
